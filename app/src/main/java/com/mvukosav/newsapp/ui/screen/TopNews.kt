@@ -1,6 +1,5 @@
 package com.mvukosav.newsapp.ui.screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,26 +10,27 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.mvukosav.MockData
 import com.mvukosav.MockData.getTimeAgo
 import com.mvukosav.MockData.stringToDate
-import com.mvukosav.newsapp.models.NewsData
+import com.mvukosav.newsapp.R
+import com.mvukosav.newsapp.models.TopNewsArticle
+import com.skydoves.landscapist.coil.CoilImage
 
 @Composable
-fun TopNews(navController: NavController) {
+fun TopNews(navController: NavController, articles: List<TopNewsArticle>) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -42,9 +42,9 @@ fun TopNews(navController: NavController) {
             modifier = Modifier.padding(10.dp)
         )
         LazyColumn {
-            items(MockData.topNewsList) {
-                TopNewsItem(newsData = it, onNewsClick = {
-                    navController.navigate("Detail/${it.newsId}")
+            items(articles.size) { index ->
+                TopNewsItem(article = articles[index], onNewsClick = {
+                    navController.navigate("Detail/${index}")
                 })
             }
         }
@@ -52,7 +52,7 @@ fun TopNews(navController: NavController) {
 }
 
 @Composable
-fun TopNewsItem(newsData: NewsData, onNewsClick: () -> Unit = {}) {
+fun TopNewsItem(article: TopNewsArticle, onNewsClick: () -> Unit = {}) {
     Box(
         modifier = Modifier
             .height(200.dp)
@@ -61,11 +61,11 @@ fun TopNewsItem(newsData: NewsData, onNewsClick: () -> Unit = {}) {
                 onNewsClick()
             }
     ) {
-        Image(
-            modifier = Modifier.fillMaxWidth(),
-            painter = painterResource(id = newsData.image),
-            contentDescription = newsData.title,
-            contentScale = ContentScale.Crop
+        CoilImage(
+            imageModel = article.urlToImage,
+            contentScale = ContentScale.Crop,
+            error = ImageBitmap.imageResource(id = R.drawable.breaking_news),
+            placeHolder = ImageBitmap.imageResource(id = R.drawable.news_picture)
         )
         Column(
             modifier = Modifier
@@ -74,13 +74,13 @@ fun TopNewsItem(newsData: NewsData, onNewsClick: () -> Unit = {}) {
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = stringToDate(newsData.publishedAt).getTimeAgo(),
+                text = stringToDate(article.publishedAt!!).getTimeAgo(),
                 color = Color.White,
                 fontWeight = FontWeight.SemiBold
             )
             Spacer(modifier = Modifier.height(100.dp))
             Text(
-                text = newsData.title,
+                text = article.title!!,
                 color = Color.White,
                 fontWeight = FontWeight.SemiBold
             )
@@ -91,5 +91,12 @@ fun TopNewsItem(newsData: NewsData, onNewsClick: () -> Unit = {}) {
 @Preview(showBackground = true)
 @Composable
 fun TopNewsPreview() {
-    TopNewsItem(newsData = MockData.topNewsList[0])
+    TopNewsItem(
+        TopNewsArticle(
+            author = "Marko Vukosav",
+            title = "Legenda o MV",
+            description = "Kako je marko postao legenda u gradu Zagrebu sa puno oblaka i dima preko jedne gore zelene",
+            publishedAt = "2023-01-01T:04:42:40Z"
+        )
+    )
 }

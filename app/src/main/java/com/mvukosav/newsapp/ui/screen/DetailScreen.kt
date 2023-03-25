@@ -1,13 +1,11 @@
 package com.mvukosav.newsapp.ui.screen
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -23,25 +21,25 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.mvukosav.MockData
 import com.mvukosav.MockData.getTimeAgo
 import com.mvukosav.MockData.stringToDate
 import com.mvukosav.newsapp.R
-import com.mvukosav.newsapp.models.NewsData
+import com.mvukosav.newsapp.models.TopNewsArticle
+import com.skydoves.landscapist.coil.CoilImage
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun DetailScreen(newsData: NewsData, scrollState: ScrollState, navController: NavController) {
+fun DetailScreen(article: TopNewsArticle, scrollState: ScrollState, navController: NavController) {
     Scaffold(topBar = {
         TopBar(onBackPressed = {
             navController.popBackStack()
@@ -54,13 +52,11 @@ fun DetailScreen(newsData: NewsData, scrollState: ScrollState, navController: Na
                 .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(id = newsData.image),
-                contentDescription = "",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .padding(vertical = 10.dp), contentScale = ContentScale.Crop
+            CoilImage(
+                imageModel = article.urlToImage,
+                contentScale = ContentScale.Crop,
+                error = ImageBitmap.imageResource(id = R.drawable.breaking_news),
+                placeHolder = ImageBitmap.imageResource(id = R.drawable.news_picture)
             )
             Row(
                 modifier = Modifier
@@ -68,18 +64,18 @@ fun DetailScreen(newsData: NewsData, scrollState: ScrollState, navController: Na
                     .padding(vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                InfoWithIcon(icon = Icons.Default.Edit, info = newsData.author)
+                InfoWithIcon(icon = Icons.Default.Edit, info = article.author?:"Not available")
                 InfoWithIcon(
                     icon = Icons.Default.DateRange,
-                    info = stringToDate(newsData.publishedAt).getTimeAgo()
+                    info = stringToDate(article.publishedAt!!).getTimeAgo()
                 )
             }
             Text(
-                text = newsData.title, fontWeight = FontWeight.Bold,
+                text = article.title?:"Not available", fontWeight = FontWeight.Bold,
                 modifier = Modifier.align(Alignment.Start)
             )
             Text(
-                text = newsData.description, modifier = Modifier
+                text = article.description?:"Not available", modifier = Modifier
                     .padding(vertical = 16.dp)
                     .align(Alignment.Start)
             )
@@ -118,5 +114,12 @@ fun InfoWithIcon(icon: ImageVector, info: String) {
 @Preview(showBackground = true)
 @Composable
 fun DetailScreenPreview() {
-    DetailScreen(MockData.topNewsList[0], rememberScrollState(), rememberNavController())
+    DetailScreen(
+        article = TopNewsArticle(
+            author = "Marko Vukosav",
+            title = "Legenda o MV",
+            description = "Kako je marko postao legenda u gradu Zagrebu sa puno oblaka i dima preko jedne gore zelene",
+            publishedAt = "2023-01-01T04:42:40Z"
+        ), rememberScrollState(), rememberNavController()
+    )
 }
