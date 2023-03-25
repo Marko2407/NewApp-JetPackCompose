@@ -47,7 +47,8 @@ fun Navigation(
     newsManager: NewsManager = NewsManager(),
     paddingValues: PaddingValues
 ) {
-    val articles = newsManager.newResponse.value.articles
+    val articles = mutableListOf<TopNewsArticle>()
+    articles.addAll(newsManager.newResponse.value.articles ?: listOf(TopNewsArticle()))
     Log.d("news", articles.toString())
 
     articles?.let {
@@ -64,6 +65,13 @@ fun Navigation(
                 // passing arguments through screens
                 val index = navBackStackEntry.arguments?.getInt("index")
                 index?.let {
+                    if (newsManager.query.value.isNotEmpty()) {
+                        articles.clear()
+                        articles.addAll(newsManager.getArticleByQuery.value.articles ?: listOf())
+                    } else {
+                        articles.clear()
+                        articles.addAll(newsManager.newResponse.value.articles ?: listOf())
+                    }
                     val article = articles[index]
                     DetailScreen(article, scrollState = scrollState, navController)
                 }
@@ -82,7 +90,9 @@ fun NavGraphBuilder.bottomNavigation(
     composable(BottomBarMenuScreen.TopNews.route) {
         TopNews(
             navController = navController,
-            articles
+            articles = articles,
+            newsManager = newsManager,
+            query = newsManager.query
         )
     }
     composable(BottomBarMenuScreen.Categories.route) {

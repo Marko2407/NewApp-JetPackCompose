@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,24 +27,33 @@ import androidx.navigation.NavController
 import com.mvukosav.MockData.getTimeAgo
 import com.mvukosav.MockData.stringToDate
 import com.mvukosav.newsapp.R
+import com.mvukosav.newsapp.components.SearchBar
 import com.mvukosav.newsapp.models.TopNewsArticle
+import com.mvukosav.newsapp.network.NewsManager
 import com.skydoves.landscapist.coil.CoilImage
 
 @Composable
-fun TopNews(navController: NavController, articles: List<TopNewsArticle>) {
+fun TopNews(
+    navController: NavController,
+    articles: List<TopNewsArticle>,
+    query: MutableState<String>,
+    newsManager: NewsManager
+) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Top News",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(10.dp)
-        )
+        SearchBar(query = query, newsManager = newsManager)
+        val searchedText = query.value
+        val resultList = mutableListOf<TopNewsArticle>()
+        if (searchedText != "") {
+            resultList.addAll(newsManager.getArticleByQuery.value.articles ?: articles)
+        } else {
+            resultList.addAll(articles)
+        }
         LazyColumn {
-            items(articles.size) { index ->
-                TopNewsItem(article = articles[index], onNewsClick = {
+            items(resultList.size) { index ->
+                TopNewsItem(article = resultList[index], onNewsClick = {
                     navController.navigate("Detail/${index}")
                 })
             }
@@ -73,17 +83,22 @@ fun TopNewsItem(article: TopNewsArticle, onNewsClick: () -> Unit = {}) {
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = stringToDate(article.publishedAt!!).getTimeAgo(),
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold
-            )
+            article.publishedAt?.let {
+                Text(
+                    text = stringToDate(article.publishedAt).getTimeAgo(),
+                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+
             Spacer(modifier = Modifier.height(100.dp))
-            Text(
-                text = article.title!!,
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold
-            )
+            article.title?.let {
+                Text(
+                    text = article.title!!,
+                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
         }
     }
 }
