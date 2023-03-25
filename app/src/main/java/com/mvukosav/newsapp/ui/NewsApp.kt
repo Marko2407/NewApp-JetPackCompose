@@ -96,5 +96,7 @@ fun NavGraphBuilder.bottomNavigation(
                 newsManager.getArticlesByCategory(categoryName)
             })
     }
-    composable(BottomBarMenuScreen.Sources.route) { Sources() }
+    composable(BottomBarMenuScreen.Sources.route) {
+        Sources(newsManager = newsManager)
+    }
 }
