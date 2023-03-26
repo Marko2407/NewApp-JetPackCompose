@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.mvukosav.newsapp.R
-import com.mvukosav.newsapp.models.TopNewsArticle
+import com.mvukosav.newsapp.data.models.TopNewsArticle
 import com.mvukosav.newsapp.utils.getTimeAgo
 import com.mvukosav.newsapp.utils.stringToDate
 import com.skydoves.landscapist.coil.CoilImage

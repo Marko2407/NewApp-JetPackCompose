@@ -1,4 +1,4 @@
-package com.mvukosav.newsapp.models
+package com.mvukosav.newsapp.data.models
 
 
 data class TopNewsArticle(

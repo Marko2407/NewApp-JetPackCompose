@@ -1,5 +1,6 @@
 package com.mvukosav.newsapp.ui.screen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +17,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
@@ -28,28 +31,42 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mvukosav.newsapp.R
-import com.mvukosav.newsapp.models.TopNewsArticle
-import com.mvukosav.newsapp.models.getAllArticleCategories
+import com.mvukosav.newsapp.components.ErrorUI
+import com.mvukosav.newsapp.components.LoadingUI
+import com.mvukosav.newsapp.data.models.TopNewsArticle
+import com.mvukosav.newsapp.data.models.getAllArticleCategories
 import com.mvukosav.newsapp.network.NewsManager
+import com.mvukosav.newsapp.ui.MainViewModel
 import com.mvukosav.newsapp.utils.getTimeAgo
 import com.mvukosav.newsapp.utils.stringToDate
 import com.skydoves.landscapist.coil.CoilImage
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun Categories(onFetchCategory: (String) -> Unit = {}, newsManager: NewsManager) {
+fun Categories(onFetchCategory: (String) -> Unit = {}, viewModel: MainViewModel, isLoading: MutableState<Boolean>, isError: MutableState<Boolean>) {
     val tabItems = getAllArticleCategories()
     Column {
-        LazyRow {
-            items(tabItems.size) {
-                val category = tabItems[it]
-                CategoryTab(
-                    category = category.categoryName,
-                    onFetchCategory = onFetchCategory,
-                    isSelected = newsManager.selectedCategory.value == category
-                )
+        when {
+            isLoading.value -> {
+                LoadingUI()
+            }
+            isError.value -> {
+                ErrorUI()
+            }
+            else -> {
+                LazyRow {
+                    items(tabItems.size) {
+                        val category = tabItems[it]
+                        CategoryTab(
+                            category = category.categoryName,
+                            onFetchCategory = onFetchCategory,
+                            isSelected = viewModel.selectedCategory.collectAsState().value == category
+                        )
+                    }
+                }
             }
         }
-        ArticleContent(articles = newsManager.getArticleByCategory.value.articles ?: listOf())
+        ArticleContent(articles = viewModel.getArticleByCategory.collectAsState().value.articles ?: listOf())
     }
 }
 

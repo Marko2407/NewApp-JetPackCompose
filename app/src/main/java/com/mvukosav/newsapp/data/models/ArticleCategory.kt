@@ -1,6 +1,6 @@
-package com.mvukosav.newsapp.models
+package com.mvukosav.newsapp.data.models
 
-import  com.mvukosav.newsapp.models.ArticleCategory.*
+import  com.mvukosav.newsapp.data.models.ArticleCategory.*
 
 enum class ArticleCategory(val categoryName: String) {
     BUSINESS("business"),

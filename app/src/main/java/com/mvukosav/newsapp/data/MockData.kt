@@ -1,7 +1,7 @@
 package com.mvukosav.newsapp.data
 
 import com.mvukosav.newsapp.R
-import com.mvukosav.newsapp.models.NewsData
+import com.mvukosav.newsapp.data.models.NewsData
 
 object MockData {
     val topNewsList = listOf<NewsData>(
