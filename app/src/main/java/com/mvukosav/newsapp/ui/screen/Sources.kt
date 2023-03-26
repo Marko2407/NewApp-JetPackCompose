@@ -82,8 +82,10 @@ fun Sources(newsManager: NewsManager) {
                         }
                     }
 
-                })
-        }) {
+                }
+            )
+        }
+    ) {
         newsManager.getArticlesBySource()
         val articles = newsManager.getArticleBySource.value
         SourceContent(articles = articles.articles ?: listOf())
@@ -99,7 +101,7 @@ fun SourceContent(articles: List<TopNewsArticle>) {
                 pushStringAnnotation(tag = "URL", annotation = article.url ?: "newsapi.org")
                 withStyle(
                     style = SpanStyle(
-                        color =Color.Black,
+                        color = Color.Black,
                         textDecoration = TextDecoration.Underline
                     )
                 ) {
@@ -142,12 +144,11 @@ fun SourceContent(articles: List<TopNewsArticle>) {
                                             uriHandler.openUri(result.item)
                                         }
                                     }
-                            })
+                            }
+                        )
                     }
                 }
             }
         }
-
     }
-
 }

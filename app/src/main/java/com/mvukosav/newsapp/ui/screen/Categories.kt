@@ -16,7 +16,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
@@ -28,12 +27,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.mvukosav.MockData.getTimeAgo
-import com.mvukosav.MockData.stringToDate
 import com.mvukosav.newsapp.R
 import com.mvukosav.newsapp.models.TopNewsArticle
 import com.mvukosav.newsapp.models.getAllArticleCategories
 import com.mvukosav.newsapp.network.NewsManager
+import com.mvukosav.newsapp.utils.getTimeAgo
+import com.mvukosav.newsapp.utils.stringToDate
 import com.skydoves.landscapist.coil.CoilImage
 
 @Composable

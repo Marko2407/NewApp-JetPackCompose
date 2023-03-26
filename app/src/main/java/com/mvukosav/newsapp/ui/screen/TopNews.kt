@@ -22,14 +22,13 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.mvukosav.MockData.getTimeAgo
-import com.mvukosav.MockData.stringToDate
 import com.mvukosav.newsapp.R
 import com.mvukosav.newsapp.components.SearchBar
 import com.mvukosav.newsapp.models.TopNewsArticle
 import com.mvukosav.newsapp.network.NewsManager
+import com.mvukosav.newsapp.utils.getTimeAgo
+import com.mvukosav.newsapp.utils.stringToDate
 import com.skydoves.landscapist.coil.CoilImage
 
 @Composable

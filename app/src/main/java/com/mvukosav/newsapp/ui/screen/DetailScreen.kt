@@ -31,10 +31,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.mvukosav.MockData.getTimeAgo
-import com.mvukosav.MockData.stringToDate
 import com.mvukosav.newsapp.R
 import com.mvukosav.newsapp.models.TopNewsArticle
+import com.mvukosav.newsapp.utils.getTimeAgo
+import com.mvukosav.newsapp.utils.stringToDate
 import com.skydoves.landscapist.coil.CoilImage
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -64,18 +64,18 @@ fun DetailScreen(article: TopNewsArticle, scrollState: ScrollState, navControlle
                     .padding(vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                InfoWithIcon(icon = Icons.Default.Edit, info = article.author?:"Not available")
+                InfoWithIcon(icon = Icons.Default.Edit, info = article.author ?: "Not available")
                 InfoWithIcon(
                     icon = Icons.Default.DateRange,
                     info = stringToDate(article.publishedAt!!).getTimeAgo()
                 )
             }
             Text(
-                text = article.title?:"Not available", fontWeight = FontWeight.Bold,
+                text = article.title ?: "Not available", fontWeight = FontWeight.Bold,
                 modifier = Modifier.align(Alignment.Start)
             )
             Text(
-                text = article.description?:"Not available", modifier = Modifier
+                text = article.description ?: "Not available", modifier = Modifier
                     .padding(vertical = 16.dp)
                     .align(Alignment.Start)
             )

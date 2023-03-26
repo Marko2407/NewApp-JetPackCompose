@@ -9,18 +9,18 @@ enum class ArticleCategory(val categoryName: String) {
     HEALTH("health"),
     SCIENCE("science"),
     SPORTS("sports"),
-    TECH("tech")
+    TECH("tech");
 }
 
 fun getAllArticleCategories(): List<ArticleCategory> {
     return listOf(
-        ArticleCategory.BUSINESS,
-        ArticleCategory.ENTERTAINMENT,
-        ArticleCategory.GENERAL,
-        ArticleCategory.SPORTS,
-        ArticleCategory.TECH,
-        ArticleCategory.SCIENCE,
-        ArticleCategory.HEALTH
+        BUSINESS,
+        ENTERTAINMENT,
+        GENERAL,
+        SPORTS,
+        TECH,
+        SCIENCE,
+        HEALTH
     )
 }
 
